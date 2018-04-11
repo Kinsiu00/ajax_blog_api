@@ -8,7 +8,7 @@ const blogpostsArray = JSON.parse(blogpostsJSON);
 const readAll = () => blogpostsArray;
 
 const readOne = (blogpost_id) => {
-  const filteredBlogposts = blogpostsArray.filter( item => item.id === blogpost_id );
+  const filteredBlogposts = blogpostsArray.filter( blogpost => blogpost.id === blogpost_id );
   return filteredBlogposts[0];
 }
 
@@ -26,7 +26,8 @@ const create = ({title, content}) => {
 
 const update = (blogpost_id, updates) => {}
 
-const destroy = (blogpost_id) => {}
+const destroy = (blogpost_id) => {
+}
 
 module.exports = {
   readAll,
