@@ -5,13 +5,12 @@ const server = require('../index');
 
 chai.use(chaiHTTP);
 
-describe('blogposts', () => {
-  it('should list all blogposts on /blogposts GET', done => {
+describe('blogposts', function() {
+  it('should list all blogposts on /blogposts GET', function(done) {
     chai.request(server)
       .get('/api/blogposts')
-      .end(( error, response ) => {
+      .end(function( error, response ) {
         assert.strictEqual(response.status, 200, 'Status code should be 200');
-        console.log(response.body);
         assert.isArray(response.body, 'Response should be an array');
         done();
       });
