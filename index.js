@@ -15,3 +15,5 @@ app.use('/api/blogposts', blogpostRoutes);
 app.listen( PORT, () => {
   console.log(`AJAX Blog: Listening on port no. ${PORT}`);
 });
+
+module.exports = app;
