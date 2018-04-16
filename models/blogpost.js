@@ -24,9 +24,31 @@ const create = ({title, content}) => {
   return newBlogpost;
 }
 
-const update = (blogpost_id, updates) => {}
+const update = (blogpost_id, updates) => {
+  let updatedBlogpost;
+  const updatedBlogposts = blogpostsArray.map(blogpost => {
+    if (blogpost.id === blogpost_id) {
+      updatedBlogpost = {...blogpost, ...updates};
+      return updatedBlogpost;
+    } else {
+      return blogpost;
+    }
+  });
+  fs.writeFileSync(blogpostsPath, JSON.stringify(updatedBlogposts));
+  return updatedBlogpost;
+}
 
 const destroy = (blogpost_id) => {
+  let deletedBlogpost;
+  const remainingBlogposts = blogpostsArray.filter(blogpost => {
+    if (blogpost.id === blogpost_id) {
+      deletedBlogpost = blogpost;
+    } else {
+      return blogpost;
+    };
+  });
+  fs.writeFileSync(blogpostsPath, JSON.stringify(remainingBlogposts));
+  return deletedBlogpost;
 }
 
 module.exports = {
