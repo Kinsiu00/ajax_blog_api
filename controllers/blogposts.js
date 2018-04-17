@@ -1,13 +1,21 @@
 const blogpostModel = require('../models/blogpost');
 
 const readAll = (request, response) => {
-  const blogposts = blogpostModel.readAll();
-  response.send(blogposts);
+  blogpostModel.readAll()
+    .then( result => { 
+      response.json( result ); 
+    })
+    .catch( error => { console.error( error ); });
 }
 
 const readOne = (request, response) => {
-  const blogpost = blogpostModel.readOne(request.params.blogpost_id);
-  response.send(blogpost);
+  // const blogpost = blogpostModel.readOne(request.params.blogpost_id);
+  // response.send(blogpost);
+  blogpostModel.readOne(request.params.blogpost_id)
+    .then( result => {
+      response.json( result );
+    })
+    .catch( error => { console.error( error ); });    
 }
 
 const create = (request, response) => {

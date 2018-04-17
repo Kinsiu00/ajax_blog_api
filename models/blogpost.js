@@ -1,15 +1,24 @@
-const fs = require('fs');
-const path = require('path');
-const uuid = require('uuid/v1');
-const blogpostsPath = path.join(__dirname, '..', 'data', 'blogposts.json');
-const blogpostsJSON = fs.readFileSync(blogpostsPath, 'utf8');
-const blogpostsArray = JSON.parse(blogpostsJSON);
+// const fs = require('fs');
+// const path = require('path');
+// const uuid = require('uuid/v1');
+// const blogpostsPath = path.join(__dirname, '..', 'data', 'blogposts.json');
+// const blogpostsJSON = fs.readFileSync(blogpostsPath, 'utf8');
+// const blogpostsArray = JSON.parse(blogpostsJSON);
 
-const readAll = () => blogpostsArray;
+const knex = require('../db');
+
+const readAll = () => {
+  return knex('blogposts')
+    .then( rows => {
+      return rows;
+    })
+    .catch( error => { console.error(error); });
+};
 
 const readOne = (blogpost_id) => {
-  const filteredBlogposts = blogpostsArray.filter( blogpost => blogpost.id === blogpost_id );
-  return filteredBlogposts[0];
+  return knex('blogposts').where('id', blogpost_id)
+    .then( rows => { return rows[0]; })
+    .catch( error => { console.error(error); })
 }
 
 const create = ({title, content}) => {
