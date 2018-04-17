@@ -1,63 +1,41 @@
-// const fs = require('fs');
-// const path = require('path');
-// const uuid = require('uuid/v1');
-// const blogpostsPath = path.join(__dirname, '..', 'data', 'blogposts.json');
-// const blogpostsJSON = fs.readFileSync(blogpostsPath, 'utf8');
-// const blogpostsArray = JSON.parse(blogpostsJSON);
-
 const knex = require('../db');
 
 const readAll = () => {
   return knex('blogposts')
-    .then( rows => {
-      return rows;
-    })
+    .then( rows => rows )
     .catch( error => { console.error(error); });
 };
 
 const readOne = (blogpost_id) => {
   return knex('blogposts').where('id', blogpost_id)
-    .then( rows => { return rows[0]; })
+    .then( rows => rows[0] )
     .catch( error => { console.error(error); })
 }
 
 const create = ({title, content}) => {
-  const newBlogpost = {
-    id: uuid(),
-    title,
-    content
-  };
-  blogpostsArray.push(newBlogpost);
-  const blogpostsJSON = JSON.stringify(blogpostsArray);
-  fs.writeFileSync(blogpostsPath, blogpostsJSON);
-  return newBlogpost;
+  return knex('blogposts')
+    .returning('*')
+    .insert({ title, content })
+    .then( row => row[0] )
+    .catch( error => { console.error(error); });
 }
 
 const update = (blogpost_id, updates) => {
-  let updatedBlogpost;
-  const updatedBlogposts = blogpostsArray.map(blogpost => {
-    if (blogpost.id === blogpost_id) {
-      updatedBlogpost = {...blogpost, ...updates};
-      return updatedBlogpost;
-    } else {
-      return blogpost;
-    }
-  });
-  fs.writeFileSync(blogpostsPath, JSON.stringify(updatedBlogposts));
-  return updatedBlogpost;
+  return knex('blogposts')
+    .returning('*')
+    .update( updates )
+    .where('id', blogpost_id)
+    .then( row => row[0] )
+    .catch( error => { console.error( error ); });
 }
 
 const destroy = (blogpost_id) => {
-  let deletedBlogpost;
-  const remainingBlogposts = blogpostsArray.filter(blogpost => {
-    if (blogpost.id === blogpost_id) {
-      deletedBlogpost = blogpost;
-    } else {
-      return blogpost;
-    };
-  });
-  fs.writeFileSync(blogpostsPath, JSON.stringify(remainingBlogposts));
-  return deletedBlogpost;
+  return knex('blogposts')
+    .returning('*')
+    .del()
+    .where('id', blogpost_id)
+    .then( row => row[0] )
+    .catch( error => { console.error( error ); })
 }
 
 module.exports = {
